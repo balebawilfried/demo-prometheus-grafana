@@ -23,18 +23,14 @@ Bien que ce readme a pour but de donner des indications sur comment le reproduir
 
 **NB : Exécuter les commandes suivantes en étant dans le repertoire prometheus**
 
-Pour mettre en marche notre outil prometheus, il faudra :
-1) Modifier l'adresse IP définit dans nos fichiers de configuration et remplacer par l'IP de votre server. Ainsi dans le repertoire prometheus, il faudra modifier tous les fichiers **./prometheus.yml, ./application_1/resume_metric.py, etc**
-2) Lancer l'exécution en arrière plan de l'application 1
-```powershell
-# Installation de prometheus-client si ce n'est pas encore faire 
-pip install prometheus-client
+Pour mettre en marche notre outil prometheus,  :
+1) Modifier l'adresse IP définit dans nos fichiers de configuration et remplacer par l'IP de votre server.
 
-# Démarrage en arrière plan de l'application 1 
-nohup python3 ./application_1/resume_metric.py > app.log 2>&1 &
-```
-3) Démarrage de prometheus et de ses exporteurs 
+2) Démarrage de prometheus et de ses exporteurs 
 ```powershell
+# Passer en mode superutilisateur
+- sudo -s
+
 # Installation et démarrage de prometheus et du nécessaire (exporteurs)
 - docker compose up -d
 
@@ -44,10 +40,35 @@ nohup python3 ./application_1/resume_metric.py > app.log 2>&1 &
 # Pour recreer nos conteneurs si vous vous êtes trompés dans l'ordre d'exécution
 docker compose up -d --force-recreate
 ```
+3) Exécutons l'application 1 (On peut aussi exécuter l'étape 4 si nous utiliser le container à la place)
 
-4) Accéder à l'interface graphique de vos outils :
+```powershell
+# Installation de prometheus-client si ce n'est pas encore faire 
+pip install prometheus-client
+
+# Démarrage en arrière plan de l'application 1 
+nohup python3 ./application_1/resume_metric.py > app.log 2>&1 &
+```
+
+4) Executons l'application via Docker (au lieu de faire l'étape 3)
+
+```powershell
+# Dans le repository 
+# construire l'image de l'application.  
+docker build -t prometheus/custom_app .
+
+# Vérifions les nouvelles images (prometheus/custom_app et tiangolo/uwsgi-nginx-flask) présentes sur notre machine 
+docker images
+
+# Place à l'exécution/lancement de notre application
+docker run -d -p 5001:5001 prometheus/custom_app:latest
+```
+
+6) Accéder à l'interface graphique de vos outils :
     - Pour prometheus : http://votre_ipv4:9090
     - Pour node exporter : http://votre_ipv4:9100
     - Pour blackbox exporter : http://votre_ipv4:9115
-    - Pour alert manager : http://votre_ipv4:9093/
+    - Pour alert manager : http://votre_ipv4:9093
     - Pour l'application 1 :http://votre_ipv4:5000
+
+**NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant dans le repertoire prometheus.
