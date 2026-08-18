@@ -1,0 +1,16 @@
+# ici nous définissons l'ensemble de nos serveurs node exporters
+
+- targets:
+    # cette cible désigne le serveur qui héberge aussi prometheus 
+  - localhost:9100
+  labels:
+    team: "Quelques applications"
+    region: "USA"
+
+- targets:
+    # cette cible désigne un serveur distant sur lequel nous avons déployer node exporter afin de le monitorer depuis notre serveur prometheus
+    # il enverra donc ces métriques vers notre serveur prometheus
+  - 192.168.152.142:9100
+  labels:
+    team: "ALL APPLICATION"
+    region: "FRANCE"

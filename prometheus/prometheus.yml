@@ -1,0 +1,99 @@
+global:
+  # Intervalle de scrape des métriques toutes les 15s. Par défaut toutes les 1minutes.
+  scrape_interval: 15s
+  #Evaluation des règles toutes les 15s. Par défaut toutes. Par défaut toutes les 1min
+  evaluation_interval: 15s
+  # scrape_timeout
+
+
+
+
+# Configuration de alertlanager
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            #- alertmanager:9093
+
+
+
+
+# Chargement des règles et évaluation périodique basée sur la configuration globale
+# (evaluation_interval)
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+
+
+# La configuration du scrapping qui contient exactement toutes les endpoints à scrapper. 
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+
+  # Ce job permet de collecter les metriques de prometheus lui même
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['192.168.152.142:9090']
+
+  # Ce job permet de collecter les metriques des conteneurs avec cadvisor
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['192.168.152.142:8080']
+
+  # Ce job permet de collecter les metriques de la vm d'un serveur avec node exporter
+  - job_name: 'node_exporter'
+    file_sd_configs:
+    #- files:
+      #- ./dynamic_targets.yml
+      #- ./dynamic_targets.json
+    static_configs:
+      - targets: ['192.168.152.142:9100']
+
+
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    # les paramètre que nous allons définir ici, il s'agit des modules (definit dans ./blackbox_exporter/blackbox.yml).
+    # Cette juste pour indiquer le type d'action que nous allons faire sur nos dynamic_target (ip et nom de domaine de notre choix).
+    params:
+      module: 
+        - http_ipv4  # Look for a HTTP 200 response.
+
+    static_configs:
+      - targets:
+            # ici nous définissons toutes les nom de domaines des applications que >          - targets:
+          - http://prometheus.io    # Target to probe with http.
+          - https://prometheus.io   # Target to probe with https.
+            #- http://example.com:8080 # Target to probe with http on port 8080.
+          - https://apps.universitesaintjean.org
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.152.142:9115 # ici on definit l'ip/hostname réelle du blackbox exporter
+
+
+# Ce job permet de collecter les metriques des endpoint réseau avec blackbox exporter
+  - job_name: 'blackbox_exporter'
+    static_configs:
+      - targets: ['192.168.152.142:9115']
+
+
+
+  # ici nous collectons les métriques via prometheus-client que nous avons inséré dans le code de l'application
+  - job_name: 'my-app'
+    static_configs:
+      - targets: ['192.168.152.142:5001']
+    metrics_path: /metrics
+    scrape_interval: 5s
+
+  # Example: scraping multiple instances
+  - job_name: 'web-servers'
+    static_configs:
+      - targets:
+        - 'web1:9100'
+        - 'web2:9100'
+        - 'web3:9100'
+
