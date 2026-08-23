@@ -9,5 +9,5 @@ receivers:
         smarthost: smtp.gmail.com:587
         auth_username: "audrey.baleba@facsciences-uy1.cm"
         auth_identity: "audrey.baleba@facsciences-uy1.cm"
-        auth_password: "tzzezikaaayrshwb"
+        auth_password: "tzzezivaaayrshwb"
         #smtp_auth_password_file: "/run/secrets/smtp_password"
