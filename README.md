@@ -21,7 +21,6 @@ Bien que ce readme a pour but de donner des indications sur comment le reproduir
 
 ### III- PROMETHEUS
 
-**NB : Exécuter les commandes suivantes en étant dans le repertoire prometheus**
 
 Pour mettre en marche notre outil prometheus,  :
 1) Modifier l'adresse IP définit dans nos fichiers de configuration et remplacer par l'IP de votre server.
@@ -71,4 +70,4 @@ docker run -d -p 5001:5001 prometheus/custom_app:latest
     - Pour alert manager : http://votre_ipv4:9093
     - Pour l'application 1 :http://votre_ipv4:5000
 
-**NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant dans le repertoire prometheus.
+**NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant dans le repertoire prometheus. D'autres part, il important de modifier les informations de configuration du serveur SMTP présentes ici (**prometheus/alertmanager/*.yml**) avec les vôtres sinon vous aurez l'impression que ça ne marche.
