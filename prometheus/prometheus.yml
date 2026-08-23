@@ -42,11 +42,10 @@ scrape_configs:
   # Ce job permet de collecter les metriques de la vm d'un serveur avec node exporter
   - job_name: 'node_exporter'
     file_sd_configs:
-    #- files:
-      #- ./dynamic_targets.yml
-      #- ./dynamic_targets.json
-    static_configs:
-      - targets: ['192.168.152.142:9100']
+    - files:
+      - "targets/node_exporters.yml"
+    #static_configs:
+      #- targets: ['192.168.152.142:9100']
 
 
   - job_name: 'blackbox'
@@ -82,17 +81,11 @@ scrape_configs:
 
 
   # ici nous collectons les métriques via prometheus-client que nous avons inséré dans le code de l'application
-  - job_name: 'myapp'
+  - job_name: 'app'
     static_configs:
       - targets: ['192.168.152.142:5001']
     metrics_path: /metrics
     scrape_interval: 5s
 
-  # Example: scraping multiple instances
-  - job_name: 'web-servers'
-    static_configs:
-      - targets:
-        - 'web1:9100'
-        - 'web2:9100'
-        - 'web3:9100'
+
 
