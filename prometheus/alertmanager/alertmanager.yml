@@ -1,0 +1,112 @@
+global:
+  smtp_from: "audrey.baleba@facsciences-uy1.cm"
+  smtp_smarthost: smtp.gmail.com:587 
+  smtp_auth_username: "audrey.baleba@facsciences-uy1.cm"
+  smtp_auth_password: "tzzezikaaayrshwb"
+
+# Autre méthode pour configurer notre serveur SMTP
+#global:
+  #smtp_from: "monitoring@example.com"   # L'adresse qui apparaîtra comme expéditeur
+  #smtp_smarthost: "smtp.gmail.com:587"
+  #smtp_auth_username: "monitoring@example.com"
+  #smtp_auth_password_file: "/run/secrets/smtp_password"  #on peut simplement mettre le password en clair mais ce n'est pas sécurisé "16-digit password"
+
+route:
+  # Default Receiver, Fallback Receiver 
+  receiver: admin
+  group_by: ["category"]
+  routes:
+    # Route pour les alertes du système d'exploitation (OS)
+    - match_re:
+        app_type: (linux|windows)
+      # Récepteur de secours pour les alertes du système d'exploitation
+      receiver: user-admin
+      routes:
+        - match: 
+            app_type: linux 
+          # Récepteur de secours pour les alertes Linux
+          receiver: user-admin-linux
+          routes:
+            - match: 
+                severity: critical
+              receiver: user-admin-linux-manager
+              continue: true
+            - match: 
+                severity: warning
+              receiver: user-admin-linux-teamlead
+              continue: true
+
+
+
+    # Route pour les alertes des applications 
+    - match_re:
+        app_type: (python|go)
+      # Récepteur de secours pour les alertes des Applications
+      receiver: user-sol-admin
+      routes:
+        - match: 
+            app_type: python 
+          # Fallback receiver for App Alerts
+          receiver: user-sol-admin-python
+          routes:
+            - match: 
+                severity: critical
+              receiver: user-sol-admin-python-manager
+            - match: 
+                severity: warning
+              receiver: user-sol-admin-python-teamlead
+
+receivers:
+# Configuration de l'envoie des mails à l'administrateur général (DSI)
+  - name: admin
+    discord_configs:
+      #- url: 'https://discord.com/api/webhooks/1407122652702969896/Gf2ZLvj3igmOG9r6XlQyGoYRSu5AWgoSakMX3P2QhNGpm1PlR5V6U0-SMn--fY-Lg_rc'
+      - webhook_url_file: "https://discord.com/api/webhooks/1407121558350205021/NiftURKsxSbppcjBSSdCXLaVSuxnMB-7dpFQPoQ63bBCDSLxhPtJTTCoDE4nvYOUhp_F"
+# Configuration de l'envoie des mails aux Administrateur système
+  - name: user-admin
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com
+
+  - name: user-admin-linux
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com
+
+  #- name: user-admin-linux-teamlead
+    #discord_configs:
+        # webhook_url nous mettons le lien d'un webhook
+      #- webhook_url: "${WEBHOOK}"
+
+
+  - name: user-admin-linux-manager
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com
+
+  - name: user-admin-linux-teamlead
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com
+
+  #- name: user-admin-linux-cpu
+    #discord_configs:
+        # api_url nous mettons le lien d'un webhook
+      #- webhook_url: "${WEBHOOK}"
+  - name: user-admin-linux-cpu
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com
+
+  # Configuration de l'envoie des mails aux Administrateurs logiciel/solution
+
+  - name: user-sol-admin
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com
+
+  - name: user-sol-admin-python
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com
+
+  - name: user-sol-admin-python-manager
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com
+
+  - name: user-sol-admin-python-teamlead
+    email_configs:
+      - to : wilfriedaudrey.baleba@gmail.com

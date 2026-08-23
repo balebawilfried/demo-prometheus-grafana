@@ -8,12 +8,12 @@ global:
 
 
 
-# #Configuration de alertlanager
+# Configuration de alertlanager
 alerting:
   alertmanagers:
     - static_configs:
         - targets:
-            #- alertmanager:9093
+            - '192.168.152.142:9093'
 
 
 
@@ -35,9 +35,9 @@ scrape_configs:
       - targets: ['192.168.152.142:9090']
 
   # Ce job permet de collecter les metriques des conteneurs avec cadvisor
-  - job_name: 'cadvisor'
-    static_configs:
-      - targets: ['192.168.152.142:8080']
+  #- job_name: 'cadvisor'
+    #static_configs:
+      #- targets: ['192.168.152.142:8080']
 
   # Ce job permet de collecter les metriques de la vm d'un serveur avec node exporter
   - job_name: 'node_exporter'

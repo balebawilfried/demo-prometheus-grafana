@@ -41,29 +41,6 @@ services:
       #- monitoring
 
 
-  # Configuration de cadvisor
-  metrics_containers:
-    container_name: metrics_containers
-    # il permet de monitoré les containers 
-    image: ghcr.io/google/cadvisor:latest
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
-    volumes: 
-      - "/:/rootfs"
-      - "/var/run:/var/run"
-      - "/sys:/sys"
-      - "/var/lib/docker/:/var/lib/docker"
-      - "/dev/disk/:/dev/disk"
-    #privileged: true
-    devices: 
-      - "/dev/kmsg"
-    #expose:
-      #- 8080
-    #networks:
-      #- monitoring
-
-
   # ajout de alerte manager pour la configuration des notifications (email, slack, etc)
   alertmanager:
     image: prom/alertmanager:latest
@@ -72,8 +49,10 @@ services:
     ports:
       - 9093:9093
     volumes:
-      #- ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
       - alertmanager_data:/alertmanager
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
     #expose:
       #- 9093
     #networks:
@@ -109,6 +88,27 @@ services:
       #- monitoring
 
 
+  # Configuration de cadvisor
+  #metrics_containers:
+    #container_name: metrics_containers
+    # il permet de monitoré les containers
+    #image: ghcr.io/google/cadvisor:latest
+    #restart: unless-stopped
+    #ports:
+      #- "8080:8080"
+    #volumes:
+      #- "/:/rootfs"
+      #- "/var/run:/var/run"
+      #- "/sys:/sys"
+      #- "/var/lib/docker/:/var/lib/docker"
+      #- "/dev/disk/:/dev/disk"
+    #privileged: true
+    #devices:
+      #- "/dev/kmsg"
+    #expose:
+      #- 8080
+    #networks:
+      #- monitoring
 
 
 #networks:

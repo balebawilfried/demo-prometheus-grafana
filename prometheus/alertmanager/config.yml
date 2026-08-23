@@ -1,9 +1,0 @@
-route:
-  receiver: 'webhook'
-receivers:
-  - name: 'webhook'
-    webhook_configs:
-      #- url: 'http://example-receiver.local:5001/'
-      - url: 'https://discordapp.com/api/webhooks/1407121558350205021/NiftURKsxSbppcjBSSdCXLaVSuxnMB-7dpFQPoQ63bBCDSLxhPtJTTCoDE4nvYOUhp_F'
-'
-
