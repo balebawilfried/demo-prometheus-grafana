@@ -4,21 +4,21 @@ groups:
 
     # Alerte de  l'application python
 
-    - record: Latence_des_requêtes
+    - record: Latence_des_requetes
       expr: rate(app_response_latency_seconds_sum[1m]) / rate(app_response_latency_seconds_count[1m])
 
     - alert: "La latence de l'application est entre 2s et 5s"
-      expr: 2 < Latence_des_requêtes < 5
+      expr: 2 < Latence_des_requetes < 5
       for: 2m
       labels:
         severity: warning
         app_type: python
       annotations:
-        summary: "La latence de l'application Python est élevé"
-        description: "Latence de l'application de l'instance de {{ $labels.instance }} du job {{ $labels.job }} est {{ $value }} pendant plus de 5 secondes"
+        summary: "La latence de application Python est élevé"
+        description: "Latence de l'application de l'instance {{ $labels.instance }} du job {{ $labels.job }} est {{ $value }} pendant plus de 5 secondes"
 
-    - alert: "La latence de l'application est a plus de 5s"
-      expr: Latence_des_requêtes >= 5
+    - alert: "La latence de l'application est à plus de 5s"
+      expr: Latence_des_requetes >= 5
       for: 2m
       labels:
         severity: critical
