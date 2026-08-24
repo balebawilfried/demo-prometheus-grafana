@@ -14,7 +14,7 @@ groups:
         description: "Le serveur est hors service depuis plus de 2 minutes."
 
     # Stockage de la mémoire libre  
-    - record: "Mémoire libre"
+    - record: Mémoire_libre
       expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
 
     # Stockage de la mémoire consommée
@@ -22,7 +22,7 @@ groups:
       expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100
       
     - alert: "L'utilisation de la mémoire est entre 60% et 75%"
-      expr: 60 < (100 - job:node_memory_Mem_bytes:available) < 75
+      expr: 60 < (100 - Mémoire_libre) < 75
       for: 2m
       labels:
         severity: warning
@@ -33,7 +33,7 @@ groups:
         description: "La mémoire pour le noeud {{ $labels.instance }} a atteint {{ $value }}%"
 
     - alert: "L'utilisation de la mémoire est à plus de 75%"
-      expr: (100 - job:node_memory_Mem_bytes:available) >= 75
+      expr: (100 - Mémoire_libre) >= 75
       for: 2m
       labels:
         severity: critical
@@ -55,11 +55,11 @@ groups:
         description: "La charge du CPU pour le noeud {{ $labels.instance }} a atteint {{ $value }}%"
 
     # Stockage du processeur (CPU) libre
-    - record: "Quantité de processus libre"
+    - record: Quantité_de_processus_libre
       expr: avg without(cpu)(rate (node_cpu_seconds_total{mode="idle"}[1m]))
 
     # Stockage du processeur (CPU) utilisé
-    - record: "Quantié de processeur consommé"
+    - record: Quantié_de_processeur_consommé
       expr: avg without(cpu, mode)(rate (node_cpu_seconds_total{mode!="idle"}[1m]))
 
     - alert: "L'utilisation du CPU_0 est très élevé"

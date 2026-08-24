@@ -4,11 +4,11 @@ groups:
 
     # Alerte de  l'application python
 
-    - record: "Latence des requêtes"
+    - record: Latence_des_requêtes
       expr: rate(app_response_latency_seconds_sum[1m]) / rate(app_response_latency_seconds_count[1m])
 
     - alert: "La latence de l'application est entre 2s et 5s"
-      expr: 2 < job:app_request_latency_seconds:rate1m < 5
+      expr: 2 < Latence_des_requêtes < 5
       for: 2m
       labels:
         severity: warning
@@ -18,7 +18,7 @@ groups:
         description: "Latence de l'application de l'instance de {{ $labels.instance }} du job {{ $labels.job }} est {{ $value }} pendant plus de 5 secondes"
 
     - alert: "La latence de l'application est a plus de 5s"
-      expr: job:app_request_latency_seconds:rate1m >= 5
+      expr: Latence_des_requêtes >= 5
       for: 2m
       labels:
         severity: critical
