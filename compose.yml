@@ -1,0 +1,313 @@
+services:
+
+  # ============================================================
+  # PROMETHEUS
+  # ============================================================
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION}
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+      - ./prometheus/targets:/etc/prometheus/targets:ro
+      - prometheus_data:/prometheus
+
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=${PROMETHEUS_RETENTION}'
+      - '--web.enable-lifecycle'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+
+    #expose:
+      #- "9090"
+
+    networks:
+      - monitoring
+
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-verbose
+        - --tries=1
+        - --spider
+        - http://localhost:9090/-/healthy
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================
+  # ALERTMANAGER
+  # ============================================================
+  alertmanager:
+    image: prom/alertmanager:${ALERTMANAGER_VERSION}
+    container_name: alertmanager
+    restart: unless-stopped
+    ports:
+      - 9093:9093
+
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager_data:/alertmanager
+
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+
+    #expose:
+      #- "9093"
+
+    networks:
+      - monitoring
+
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-verbose
+        - --tries=1
+        - --spider
+        - http://localhost:9093/-/healthy
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+
+  # ============================================================
+  # NODE EXPORTER
+  # ============================================================
+  nodeexporter:
+    image: prom/node-exporter:${NODEEXPORTER_VERSION}
+    container_name: nodeexporter
+    restart: unless-stopped
+    ports:
+      - 9100:9100
+
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)' 
+
+    #expose:
+      #- "9100"
+
+    networks:
+      - monitoring
+
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-verbose
+        - --tries=1
+        - --spider
+        - http://localhost:9100/-/healthy
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+
+  # ============================================================
+  # BLACKBOX EXPORTER
+  # ============================================================
+  blackboxexporter:
+    image: prom/blackbox-exporter:${BLACKBOXEXPORTER_VERSION}
+    container_name: blackboxexporter
+    restart: unless-stopped
+    ports:
+      - 9115:9115
+
+    volumes:
+      - ./blackbox_exporter/config:/config
+      - ./blackbox_exporter/blackbox.yml:/config/blackbox.yml
+
+    command:
+      - '--config.file=/config/blackbox.yml'
+
+    #expose:
+      #- "9115"
+
+    networks:
+      - monitoring
+
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-verbose
+        - --tries=1
+        - --spider
+        - http://localhost:9115/-/healthy
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+
+  # ============================================================
+  # LOKI
+  # ============================================================
+  loki:
+    image: grafana/loki:${LOKI_VERSION}
+    container_name: loki
+    restart: unless-stopped
+    ports:
+      - 3100:3100
+
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+      #- ./loki:/mnt/config
+      - loki_data:/loki
+
+    command:
+      - '--config.file=/etc/loki/loki-config.yml'
+      - '--target=all'
+
+    #expose:
+      #- "3100"
+
+    networks:
+      - monitoring
+
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --no-verbose
+        - --tries=1
+        - --spider
+        - http://localhost:3100/ready
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+
+  # ============================================================
+  # GRAFANA ALLOY
+  # ============================================================
+  alloy:
+    image: grafana/alloy:${ALLOY_VERSION}
+    container_name: alloy
+    restart: unless-stopped
+    ports:
+      - 12345:12345
+
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+
+    volumes:
+      #- ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - ./alloy/alloy-local-config.yml:/etc/alloy/config.alloy:ro
+
+      # Lecture des logs Docker
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+
+      # Permet à Alloy de découvrir les containers
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    #expose:
+      #- "12345"
+
+    networks:
+      - monitoring
+
+    #depends_on:
+      #loki:
+        #condition: service_healthy
+
+
+  # ============================================================
+  # GRAFANA
+  # ============================================================
+  grafana:
+    image: grafana/grafana:${GRAFANA_VERSION}
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      # Accessible uniquement depuis le serveur.
+      #- "127.0.0.1:3000:3000"
+      - 3000:3000
+
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
+
+    secrets:
+      - grafana_admin_password
+
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+
+    networks:
+      - monitoring
+
+    depends_on:
+      #loki:
+        #condition: service_healthy
+      prometheus:
+        condition: service_healthy
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+
+# ==============================================================
+# NETWORK
+# ==============================================================
+networks:
+  monitoring:
+    name: monitoring
+    driver: bridge
+
+
+# ==============================================================
+# VOLUMES
+# ==============================================================
+volumes:
+  prometheus_data:
+    name: prometheus_data
+
+  alertmanager_data:
+    name: alertmanager_data
+
+  loki_data:
+    name: loki_data
+
+  grafana_data:
+    name: grafana_data
+
+  alloy_data:
+    name: alloy_data
+
+
+# ==============================================================
+# SECRETS
+# ==============================================================
+secrets:
+  grafana_admin_password:
+    file: ./secrets/grafana_admin_password
