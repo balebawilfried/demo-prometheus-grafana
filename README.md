@@ -70,4 +70,4 @@ docker run -d -p 5001:5001 prometheus/custom_app:latest
     - Pour alert manager : http://votre_ipv4:9093
     - Pour l'application 1 :http://votre_ipv4:5000
 
-**NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant dans le repertoire prometheus. D'autres part, il important de modifier les informations de configuration du serveur SMTP présentes ici (**prometheus/alertmanager/*.yml**) avec les vôtres sinon vous aurez l'impression que ça ne marche.
+**NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant à la racine du projet. D'autres part, il important de modifier les informations de configuration du serveur SMTP présentes ici (**./alertmanager/*.yml**) avec les vôtres sinon vous aurez l'impression que ça ne marche.
