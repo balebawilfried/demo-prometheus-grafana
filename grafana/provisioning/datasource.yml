@@ -1,12 +1,46 @@
 apiVersion: 1
 
+#datasources:
+  #- name: Prometheus-1
+    #type: prometheus
+    #url: http://192.168.152.142:9090
+    #isDefault: true
+    #access: proxy
+    #editable: true
+
+
 datasources:
-  - name: Prometheus1
+  - name: Prometheus
     type: prometheus
-    url: http://192.168.152.142:9090
-    isDefault: true
     access: proxy
-    editable: true
+    url: http://prometheus:9090
+    jsonData:
+      httpMethod: POST
+      manageAlerts: true
+      allowAsRecordingRulesTarget: true
+      prometheusType: Prometheus
+      # Ici je dois explicitement mettre la bonne version de grafana
+      prometheusVersion: 3.3.0
+      # Contrôle le niveau de cache utilisé par Grafana pour les requêtes vers Prometheus.
+      cacheLevel: 'High'
+      # Cela signifie que le recording rules ne sont pas désactivées.
+      disableRecordingRules: false
+      # c'est la manière dont Grafana récupère certaines informations de séries temporelles auprès de Prometheus.
+      seriesEndpoint: false
+      # Cela indique à Grafana l'intervalle minimal/de référence pour les requêtes vers cette datasource.
+      timeInterval: 15s
+      # C'est un paramètre plus avancé concernant certaines requêtes incrémentales.
+      incrementalQueryOverlapWindow: 10m
+      exemplarTraceIdDestinations:
+        - datasourceUid: my_jaeger_uid
+          name: traceID
+        - name: traceID
+          url: 'http://localhost:3000/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Jaeger%22,%7B%22query%22:%22$${__value.raw}%22%7D%5D'
+
+
+
+
+
 
   - name: Loki
     uid: loki
