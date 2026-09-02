@@ -74,4 +74,8 @@ docker run -d -p 5001:5001 prometheus/custom_app:latest
 **NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant à la racine du projet. D'autres part, il important de modifier les informations de configuration du serveur SMTP présentes ici (**./alertmanager/*.yml**) avec les vôtres sinon vous aurez l'impression que ça ne marche.
 
 ### IV- CONFIGURATION
+Une fois que l'ensemble des outils a lancé d'après la pertie **II**, il est important de modifier les paramètres IP dans le fichier **./grafana/provisioning/datasource.yml**. 
 
+
+
+**NB :** A chaque modification d'un fichier .yml, nous avons besoin de faire un **docker compose up -d**
