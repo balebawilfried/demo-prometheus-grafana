@@ -69,13 +69,18 @@ docker run -d -p 5001:5001 prometheus/custom_app:latest
     - Pour node exporter : http://votre_ipv4:9100
     - Pour blackbox exporter : http://votre_ipv4:9115
     - Pour alert manager : http://votre_ipv4:9093
+    - Pour alloy :http://votre_ipv4:12345
     - Pour l'application 1 :http://votre_ipv4:5000
 
 **NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant à la racine du projet. D'autres part, il important de modifier les informations de configuration du serveur SMTP présentes ici (**./alertmanager/*.yml**) avec les vôtres sinon vous aurez l'impression que ça ne marche.
 
 ### IV- CONFIGURATION
-Une fois que l'ensemble des outils a lancé d'après la pertie **II**, il est important de modifier les paramètres IP dans le fichier **./grafana/provisioning/datasource.yml**. 
+Après avoir terminer la partie **II**, normalement tous les outils seront démarrés et nous pourrons y avoir accès.  Il est important de modifier les paramètres IP dans le fichier **./grafana/provisioning/datasource.yml**. L'IP ici renvoit à l'IP que docker a attribué aux containers après leur création, éventuellement nous pouvons utiliser leur noms de domaine à la place.  
 
 
 
-**NB :** A chaque modification d'un fichier .yml, nous avons besoin de faire un **docker compose up -d**
+
+
+**NB :** A chaque modification d'un fichier .yml, nous avons besoin de faire un **docker compose up -d**. 
+
+**Si vous souhaitez utiliser ce travail pour déployer plus tard en production, il est important de clairement définir la version de nos outils dans le fichier de variable d'environnement du projet .env**
