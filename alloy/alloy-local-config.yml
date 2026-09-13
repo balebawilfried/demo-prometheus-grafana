@@ -1,40 +1,189 @@
+// ============================================================
+// ALLOY DEBUGGING
+// ============================================================
+
+livedebugging {
+  enabled = true
+}
+
+
+// ============================================================
+// DOCKER DISCOVERY
+// ============================================================
+
 discovery.docker "containers" {
-	host = "unix:///var/run/docker.sock"
-	refresh_interval = "5s"
+  host = "unix:///var/run/docker.sock"
+  refresh_interval = "5s"
 }
 
-discovery.relabel "containers" {
-	targets = discovery.docker.containers.targets
 
-	rule {
-		source_labels = ["__meta_docker_container_name"]
-		regex         = "/(.*)"
-		target_label  = "container"
-	}
+// ============================================================
+// DOCKER RELABELING
+// ============================================================
+
+discovery.relabel "docker_logs" {
+
+  // On ne modifie pas directement les targets.
+  // On expose uniquement les règles de relabeling.
+  // targets = discovery.docker.containers.targets
+  targets = []
+
+  // ----------------------------------------------------------
+  // Nom du conteneur
+  // ----------------------------------------------------------
 
   rule {
-    source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
-    target_label  = "compose_project"
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.*)"
+    target_label  = "container"
   }
 
+  // ----------------------------------------------------------
+  // Image Docker
+  // ----------------------------------------------------------
+
   rule {
-    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
-    target_label  = "compose_service"
+    source_labels = ["__meta_docker_container_image"]
+    target_label  = "image"
+  }
+
+  // ----------------------------------------------------------
+  // ID du conteneur
+  // ----------------------------------------------------------
+
+  rule {
+    source_labels = ["__meta_docker_container_id"]
+    target_label  = "container_id"
+  }
+
+  // ----------------------------------------------------------
+  // Docker Compose project
+  // ----------------------------------------------------------
+
+  rule {
+    source_labels = [
+      "__meta_docker_container_label_com_docker_compose_project",
+    ]
+
+    target_label = "compose_project"
+  }
+
+  // ----------------------------------------------------------
+  // Docker Compose service
+  // ----------------------------------------------------------
+
+  rule {
+    source_labels = [
+      "__meta_docker_container_label_com_docker_compose_service",
+    ]
+
+    target_label = "compose_service"
   }
 }
 
+
+// ============================================================
+// DOCKER CONTAINER LOGS
+// ============================================================
 
 loki.source.docker "containers" {
-	host             = "unix:///var/run/docker.sock"
-  targets          = discovery.relabel.containers.output
-	forward_to       = [loki.write.default.receiver]
-	refresh_interval = "5s"
+
+  host = "unix:///var/run/docker.sock"
+
+  targets = discovery.docker.containers.targets
+
+  labels = {
+    source = "docker",
+    job    = "docker",
+  }
+
+  relabel_rules = discovery.relabel.docker_logs.rules
+
+  forward_to = [
+    loki.write.local.receiver,
+  ]
 }
 
 
-loki.write "default" {
-	endpoint {
-		url = "http://192.168.152.142:3100/loki/api/v1/push"
-		tenant_id = "tenant1"
-	}
+// ============================================================
+// SYSTEM LOGS
+// ============================================================
+
+loki.source.file "system_logs" {
+
+  targets = [
+    {
+      "__path__" = "/var/log/syslog",
+      "job"      = "system",
+      "source"   = "linux",
+    },
+
+    {
+      "__path__" = "/var/log/auth.log",
+      "job"      = "authentication",
+      "source"   = "linux",
+    },
+  ]
+
+  forward_to = [
+    loki.write.local.receiver,
+  ]
+}
+
+
+// ============================================================
+// NGINX LOGS
+// ============================================================
+
+loki.source.file "nginx_logs" {
+
+  targets = [
+    {
+      "__path__" = "/var/log/nginx/*.log",
+      "job"      = "nginx",
+      "source"   = "nginx",
+    },
+  ]
+
+  forward_to = [
+    loki.write.local.receiver,
+  ]
+}
+
+
+// ============================================================
+// APPLICATION LOGS
+// ============================================================
+
+loki.source.file "application_logs" {
+
+  targets = [
+    {
+      "__path__" = "/var/log/apps/**/*.log",
+      "job"      = "applications",
+      "source"   = "application",
+    },
+  ]
+
+  file_match {
+    enabled     = true
+    sync_period = "10s"
+  }
+
+  forward_to = [
+    loki.write.local.receiver,
+  ]
+}
+
+
+// ============================================================
+// LOKI OUTPUT
+// ============================================================
+
+loki.write "local" {
+
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+    tenant_id = "loki_serveur"
+  }
 }

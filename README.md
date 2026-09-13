@@ -45,7 +45,7 @@ docker compose up -d --force-recreate
 # Installation de prometheus-client si ce n'est pas encore faire 
 pip install prometheus-client
 
-# Démarrage en arrière plan de l'application 1 
+# Démarrage en arrière plan de l'application 1. Nous allons exécuter la commande suivante en étant dans le repertoire prometheus
 nohup python3 ./application_1/resume_metric.py > app.log 2>&1 &
 ```
 
@@ -53,7 +53,7 @@ nohup python3 ./application_1/resume_metric.py > app.log 2>&1 &
 
 ```powershell
 # Dans le repository 
-# construire l'image de l'application.  
+# construire l'image de l'application. Nous allons exécuter la commande suivante en étant dans le repertoire prometheus/application_docker
 docker build -t prometheus/custom_app .
 
 # Vérifions les nouvelles images (prometheus/custom_app et tiangolo/uwsgi-nginx-flask) présentes sur notre machine 
@@ -69,13 +69,14 @@ docker run -d -p 5001:5001 prometheus/custom_app:latest
     - Pour node exporter : http://votre_ipv4:9100
     - Pour blackbox exporter : http://votre_ipv4:9115
     - Pour alert manager : http://votre_ipv4:9093
-    - Pour alloy :http://votre_ipv4:12345
+    - Pour alloy : http://votre_ipv4:12345
+    - Pour loki : http://votre_ipv4:3100
     - Pour l'application 1 :http://votre_ipv4:5000
 
-**NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant à la racine du projet. D'autres part, il important de modifier les informations de configuration du serveur SMTP présentes ici (**./alertmanager/*.yml**) avec les vôtres sinon vous aurez l'impression que ça ne marche.
+**NB :** Il faudra exécuter les commandes ci-dessus dans le terminal en étant à la racine du projet. D'autres part, il important de modifier les informations de configuration du serveur SMTP présentes ici (**./alertmanager/*.yml**) avec les vôtres sinon vous n'allez pas reçevoir les notification de alertmanager.
 
-### IV- CONFIGURATION
-Après avoir terminer la partie **II**, normalement tous les outils seront démarrés et nous pourrons y avoir accès.  Il est important de modifier les paramètres IP dans le fichier **./grafana/provisioning/datasource.yml**. L'IP ici renvoit à l'IP que docker a attribué aux containers après leur création, éventuellement nous pouvons utiliser leur noms de domaine à la place.  
+### IV- CONFIGURATION DE GRAFANA
+Afin de pouvoir ajouter/créer les dashboards, il est important d'ajouter les **sources de données** de prometheus et loki avant de créer les dashboard qui seront connectés à ces dernières. Au moment de l'ajout de la source de données, étant donné que ces éléments appartiennent au même réseau docker. Il faudra respectivement pour urls de connexion choisir **http://prometheus:9090** pour la source de données prometheus et **http://loki:3100**  pour la source de données loki. 
 
 
 

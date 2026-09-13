@@ -2,7 +2,8 @@
 
 - targets:
     # cette cible désigne le serveur qui héberge aussi prometheus 
-    - '192.168.152.142:9100'
+    #- '192.168.152.142:9100'
+    - 'nodeexporter:9100'
   labels:
     instance: 'server-01'
     environment: 'production'
