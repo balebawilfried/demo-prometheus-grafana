@@ -1,0 +1,40 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.5.2 Chrome/142.0.7444.265 Electron/39.6.1 Safari/537.36" version="29.5.2">
+  <diagram name="Page-1" id="ujuQA8Ec40ujlYPEO-W_">
+    <mxGraphModel dx="749" dy="491" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-23" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="170" width="140" x="330" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-19" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Grafana" vertex="1">
+          <mxGeometry height="30" width="100" x="350" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="fXJVxM8uWWsMIK2GnKqU-7" edge="1" parent="1" source="52HtaBFMI2-_nE_AL3uB-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="fXJVxM8uWWsMIK2GnKqU-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Visualise les logs + métriques/traces" vertex="1">
+          <mxGeometry height="90" width="95" x="352.5" y="311" as="geometry" />
+        </mxCell>
+        <mxCell id="fXJVxM8uWWsMIK2GnKqU-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="User/Dashboard" vertex="1">
+          <mxGeometry height="49" width="120" x="540" y="331.5" as="geometry" />
+        </mxCell>
+        <mxCell id="fXJVxM8uWWsMIK2GnKqU-4" edge="1" parent="1" source="fXJVxM8uWWsMIK2GnKqU-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="52HtaBFMI2-_nE_AL3uB-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fXJVxM8uWWsMIK2GnKqU-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Prometheus" vertex="1">
+          <mxGeometry height="49" width="80" x="263.75" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="fXJVxM8uWWsMIK2GnKqU-5" edge="1" parent="1" source="fXJVxM8uWWsMIK2GnKqU-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="52HtaBFMI2-_nE_AL3uB-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fXJVxM8uWWsMIK2GnKqU-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Loki" vertex="1">
+          <mxGeometry height="49" width="72.5" x="463.75" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="fXJVxM8uWWsMIK2GnKqU-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;rotation=-90;" value="Datasource&amp;nbsp;" vertex="1">
+          <mxGeometry height="30" width="100" x="367" y="460" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

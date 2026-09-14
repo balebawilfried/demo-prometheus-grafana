@@ -1,0 +1,70 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.5.2 Chrome/142.0.7444.265 Electron/39.6.1 Safari/537.36" version="29.5.2">
+  <diagram name="Page-1" id="ujuQA8Ec40ujlYPEO-W_">
+    <mxGraphModel dx="1310" dy="860" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="230" width="180" x="880" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="140" width="480" x="260" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="110" width="160" x="20" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-33" edge="1" parent="1" source="52HtaBFMI2-_nE_AL3uB-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="52HtaBFMI2-_nE_AL3uB-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Scrape logs" vertex="1">
+          <mxGeometry height="40" width="120" x="280" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Add labels (ex :&lt;div&gt;app=nginx, env=prod)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="440" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-34" edge="1" parent="1" source="52HtaBFMI2-_nE_AL3uB-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" target="52HtaBFMI2-_nE_AL3uB-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Ship to loki" vertex="1">
+          <mxGeometry height="40" width="120" x="600" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Alloy (avant promtail)" vertex="1">
+          <mxGeometry height="30" width="120" x="440" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-4" edge="1" parent="1" source="52HtaBFMI2-_nE_AL3uB-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="52HtaBFMI2-_nE_AL3uB-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="52HtaBFMI2-_nE_AL3uB-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Genère les logs" vertex="1">
+          <mxGeometry height="45" width="135" x="30" y="597.5" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Application/server" vertex="1">
+          <mxGeometry height="30" width="100" x="50" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Object Storage (S3, GCS)" vertex="1">
+          <mxGeometry height="40" width="120" x="910" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-12" edge="1" parent="1" source="slw1T7cuy-Vs5hKYq4Q_-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="slw1T7cuy-Vs5hKYq4Q_-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Stocke les logs avec les labels basés sur l&#39;indexation&amp;nbsp;" vertex="1">
+          <mxGeometry height="50" width="140" x="900" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Grafana" vertex="1">
+          <mxGeometry height="30" width="120" x="910" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Loki" vertex="1">
+          <mxGeometry height="30" width="50" x="945" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-11" edge="1" parent="1" source="52HtaBFMI2-_nE_AL3uB-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.111;entryY=0.304;entryDx=0;entryDy=0;entryPerimeter=0;" target="slw1T7cuy-Vs5hKYq4Q_-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-14" edge="1" parent="1" source="slw1T7cuy-Vs5hKYq4Q_-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="slw1T7cuy-Vs5hKYq4Q_-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="slw1T7cuy-Vs5hKYq4Q_-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Requête via LogQL" vertex="1">
+          <mxGeometry height="30" width="120" x="910" y="650" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
